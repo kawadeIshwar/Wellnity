@@ -10,6 +10,16 @@ function SessionEditor() {
   const [tags, setTags] = useState("");
   const [jsonURL, setJsonURL] = useState("");
 
+  // Debug: Check token status
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("Current token status:", {
+      exists: !!token,
+      length: token?.length,
+      preview: token?.substring(0, 50) + "..."
+    });
+  }, []);
+
   const timerRef = useRef(null);
   const isFirstLoad = useRef(true);
 
@@ -40,34 +50,38 @@ function SessionEditor() {
       });
   }, [id, navigate]);
 
-  useEffect(() => {
-    if (isFirstLoad.current) {
-      isFirstLoad.current = false;
-      return;
-    }
+  // Auto-save functionality removed
+  // useEffect(() => {
+  //   if (isFirstLoad.current) {
+  //     isFirstLoad.current = false;
+  //     return;
+  //   }
 
-    if (timerRef.current) clearTimeout(timerRef.current);
+  //   if (timerRef.current) clearTimeout(timerRef.current);
 
-    timerRef.current = setTimeout(() => {
-      handleSave(true);
-    }, 5000);
+  //   timerRef.current = setTimeout(() => {
+  //     handleSave(true);
+  //   }, 5000);
 
-    return () => clearTimeout(timerRef.current);
-  }, [title, tags, jsonURL]);
+  //   return () => clearTimeout(timerRef.current);
+  // }, [title, tags, jsonURL]);
 
   const handleSave = async (isAuto = false) => {
     try {
       if (id === "new") {
+        console.log("Creating new session with data:", { title, tags, jsonURL });
         const res = await axios.post("/my-sessions/create", {
           title,
           tags: tags.split(",").map((t) => t.trim()),
           json_file_url: jsonURL,
         });
-        if (res.data && res.data.id) {
-          navigate(`/edit/${res.data.id}`);
+        console.log("Session creation response:", res.data);
+        if (res.data && res.data._id) {
+          navigate(`/edit/${res.data._id}`);
         }
         if (!isAuto) alert("Session created!");
       } else {
+        console.log("Saving draft for session:", id);
         await axios.post("/my-sessions/save-draft", {
           sessionId: id,
           title,
@@ -77,7 +91,14 @@ function SessionEditor() {
         if (!isAuto) alert("Draft saved!");
       }
     } catch (err) {
-      if (!isAuto) alert("Error saving draft");
+      console.error("Error saving session:", {
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        message: err.message,
+        isAuto
+      });
+      if (!isAuto) alert(`Error saving draft: ${err.response?.data?.msg || err.message}`);
     }
   };
 
@@ -86,27 +107,38 @@ function SessionEditor() {
       let publishId = id;
 
       if (id === "new") {
+        console.log("Creating new session for publishing with data:", { title, tags, jsonURL });
         const res = await axios.post("/my-sessions/create", {
           title,
           tags: tags.split(",").map((t) => t.trim()),
           json_file_url: jsonURL,
         });
-        if (res.data && res.data.id) {
-          publishId = res.data.id;
+        console.log("Session creation response for publish:", res.data);
+        if (res.data && res.data._id) {
+          publishId = res.data._id;
           navigate(`/edit/${publishId}`);
         } else {
+          console.error("No _id in response:", res.data);
           alert("Could not create session for publishing");
           return;
         }
       } else {
+        console.log("Saving draft before publishing for session:", id);
         await handleSave();
       }
 
+      console.log("Publishing session with ID:", publishId);
       await axios.post("/my-sessions/publish", { sessionId: publishId });
       alert("Session published!");
       navigate("/dashboard");
     } catch (err) {
-      alert("Error publishing session");
+      console.error("Error publishing session:", {
+        status: err.response?.status,
+        statusText: err.response?.statusText,
+        data: err.response?.data,
+        message: err.message
+      });
+      alert(`Error publishing session: ${err.response?.data?.msg || err.message}`);
     }
   };
 
@@ -114,7 +146,7 @@ function SessionEditor() {
     <div className="min-h-screen bg-emerald-50 flex items-center justify-center py-10 px-4 font-poppins">
       <div className="w-full max-w-2xl bg-slate-900 shadow-xl rounded-xl p-8">
         <h1 className="text-3xl font-bold mb-6 text-center text-gray-100">
-          Session Editor (Auto-Save)
+          Session Editor
         </h1>
 
         <input
