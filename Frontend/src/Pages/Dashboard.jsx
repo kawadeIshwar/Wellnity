@@ -4,7 +4,6 @@ import axios from "../api/axios";
 function Dashboard() {
   const [sessions, setSessions] = useState([]);
 
-  // 👇 Fetch function is moved outside useEffect
   const fetchSessions = async () => {
     try {
       const res = await axios.get("/sessions");
@@ -19,25 +18,33 @@ function Dashboard() {
   }, []);
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Public Wellness Sessions</h1>
+    <div className="min-h-screen bg-emerald-50 flex flex-col items-center justify-start py-10 px-4">
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">
+        Public Wellness Sessions
+      </h1>
+
       {sessions.length === 0 ? (
-        <p>No published sessions yet.</p>
+        <p className="text-gray-800">No published sessions yet.</p>
       ) : (
-        sessions.map((s) => (
-          <div key={s._id} className="mb-4 border p-3 rounded shadow">
-            <h2 className="text-lg font-semibold">{s.title}</h2>
-            <p className="text-sm text-gray-600">Tags: {s.tags.join(", ")}</p>
-            <a
-              href={s.json_file_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline"
+        <div className="flex flex-col gap-4 items-center w-full max-w-2xl">
+          {sessions.map((s) => (
+            <div
+              key={s._id}
+              className="w-full border p-4 rounded-xl shadow-xl bg-gradient-to-tr from-indigo-400 to-purple-500 text-gray-900 transition-transform hover:-translate-y-1"
             >
-              View JSON
-            </a>
-          </div>
-        ))
+              <h2 className="text-xl font-semibold">{s.title}</h2>
+              <p className="text-sm text-">Tags: {s.tags.join(", ")}</p>
+              <a
+                href={s.json_file_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-950 underline mt-2 inline-block"
+              >
+                View JSON
+              </a>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

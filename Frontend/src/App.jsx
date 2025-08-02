@@ -6,22 +6,29 @@ import MySessions from "./Pages/MySessions";
 import SessionEditor from "./Pages/SessionEditor";
 import Navbar from "./Components/Navbar";
 import PrivateRoute from "./Components/PrivateRoute";
-import ConnectionTest from "./Components/ConnectionTest";
 
 function App() {
   return (
     <BrowserRouter>
+      <Navbar /> {/* Always visible */}
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Private Routes with Navbar */}
+        {/* Private Routes */}
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/dashboard"
           element={
             <PrivateRoute>
-              <Navbar />
               <Dashboard />
             </PrivateRoute>
           }
@@ -30,7 +37,6 @@ function App() {
           path="/my-sessions"
           element={
             <PrivateRoute>
-              <Navbar />
               <MySessions />
             </PrivateRoute>
           }
@@ -39,7 +45,6 @@ function App() {
           path="/edit/:id"
           element={
             <PrivateRoute>
-              <Navbar />
               <SessionEditor />
             </PrivateRoute>
           }

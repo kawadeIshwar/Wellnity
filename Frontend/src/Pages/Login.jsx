@@ -18,13 +18,38 @@ function Login() {
   };
 
   return (
-    <div className="p-4">
-      <h1>Login</h1>
-      <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /><br />
-      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} /><br />
-      <button onClick={handleLogin}>Login</button>
+    <div className="min-h-screen flex items-center justify-center bg-purple-100 px-4">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm">
+        <h1 className="text-3xl font-semibold mb-6 text-center text-purple-800">
+          Login to Wellnity
+        </h1>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full mb-4 text-purple-800 font-bold px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full mb-6 px-4 font-bold text-purple-800 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+        />
+        <button
+          onClick={handleLogin}
+          className="w-full bg-purple-700 hover:bg-purple-800 text-white py-2 rounded-md text-sm font-medium transition"
+        >
+          Login
+        </button>
+
+                <p className="text-center my-2">Not yet Registered? <a href="/register" className="text-blue-700">Register</a></p>
+
+      </div>
     </div>
   );
 }
 
 export default Login;
+

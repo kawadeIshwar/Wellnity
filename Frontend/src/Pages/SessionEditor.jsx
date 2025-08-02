@@ -13,7 +13,6 @@ function SessionEditor() {
   const timerRef = useRef(null);
   const isFirstLoad = useRef(true);
 
-  // 🔄 Load session when ID exists and not 'new'
   useEffect(() => {
     if (!id) {
       alert("No session ID provided");
@@ -41,7 +40,6 @@ function SessionEditor() {
       });
   }, [id, navigate]);
 
-  // ⏳ Auto-save after 5s of no input
   useEffect(() => {
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
@@ -57,7 +55,6 @@ function SessionEditor() {
     return () => clearTimeout(timerRef.current);
   }, [title, tags, jsonURL]);
 
-  // 📝 Save Draft/New
   const handleSave = async (isAuto = false) => {
     try {
       if (id === "new") {
@@ -84,7 +81,6 @@ function SessionEditor() {
     }
   };
 
-  // 🚀 Publish
   const handlePublish = async () => {
     try {
       let publishId = id;
@@ -115,43 +111,49 @@ function SessionEditor() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Session Editor (Auto-Save)</h1>
+    <div className="min-h-screen bg-emerald-50 flex items-center justify-center py-10 px-4 font-poppins">
+      <div className="w-full max-w-2xl bg-slate-900 shadow-xl rounded-xl p-8">
+        <h1 className="text-3xl font-bold mb-6 text-center text-gray-100">
+          Session Editor (Auto-Save)
+        </h1>
 
-      <input
-        placeholder="Title"
-        className="block border p-2 mb-2 w-full"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+        <input
+          placeholder="Title"
+          className="block border-2 text-gray-900 p-3 mb-4 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-      <input
-        placeholder="Tags (comma-separated)"
-        className="block border p-2 mb-2 w-full"
-        value={tags}
-        onChange={(e) => setTags(e.target.value)}
-      />
+        <input
+          placeholder="Tags (comma-separated)"
+          className="block border border-gray-300 p-3 mb-4 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+        />
 
-      <input
-        placeholder="JSON File URL"
-        className="block border p-2 mb-4 w-full"
-        value={jsonURL}
-        onChange={(e) => setJsonURL(e.target.value)}
-      />
+        <input
+          placeholder="JSON File URL"
+          className="block border border-gray-300 p-3 mb-6 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          value={jsonURL}
+          onChange={(e) => setJsonURL(e.target.value)}
+        />
 
-      <button
-        onClick={() => handleSave()}
-        className="bg-gray-600 text-white px-4 py-2 mr-3 rounded"
-      >
-        Save Draft
-      </button>
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={() => handleSave()}
+            className="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700 transition"
+          >
+            Save Draft
+          </button>
 
-      <button
-        onClick={handlePublish}
-        className="bg-green-600 text-white px-4 py-2 rounded"
-      >
-        Publish
-      </button>
+          <button
+            onClick={handlePublish}
+            className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition"
+          >
+            Publish
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
