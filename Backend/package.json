@@ -5,7 +5,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "server": "nodemon server.js",
+    "client": "npm start --prefix ../frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "lint": "eslint ."
+
   },
   "keywords": [],
   "author": "",
@@ -20,6 +24,9 @@
     "mongoose": "^8.17.0"
   },
   "devDependencies": {
+    "concurrently": "^9.2.0",
+    "eslint": "^9.32.0",
+    "globals": "^16.3.0",
     "nodemon": "^3.1.10"
   }
 }

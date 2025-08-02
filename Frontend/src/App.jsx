@@ -10,13 +10,15 @@ import PrivateRoute from "./Components/PrivateRoute";
 function App() {
   return (
     <BrowserRouter>
-      <Navbar /> {/* Always visible */}
+      {/* Navbar always shows at the top */}
+      <Navbar />
+
       <Routes>
-        {/* Public Routes */}
+        {/* Public Routes (no login needed) */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Private Routes */}
+        {/* Private Routes (login required) */}
         <Route
           path="/"
           element={
@@ -55,3 +57,4 @@ function App() {
 }
 
 export default App;
+
