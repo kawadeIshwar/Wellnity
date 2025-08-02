@@ -10,8 +10,8 @@ function Register() {
   const handleRegister = async () => {
     try {
       const res = await axios.post("/auth/register", { email, password });
-      localStorage.setItem("token", res.data.token);
-      nav("/dashboard");
+      alert("Registration successful! Please login with your credentials.");
+      nav("/login");
     } catch (err) {
       alert(err.response?.data?.msg || "Register failed");
     }
