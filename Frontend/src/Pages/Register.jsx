@@ -43,7 +43,7 @@ function Register() {
         >
           Register
         </button>
-        <p className="text-center my-2">Already Registered?<a href="/login" className="text-blue-700">Login</a></p>
+        <p className="text-center my-2 font-semibold opacity-90">Already Registered? <a href="/login" className="text-blue-700">Login</a></p>
       </div>
     </div>
   );

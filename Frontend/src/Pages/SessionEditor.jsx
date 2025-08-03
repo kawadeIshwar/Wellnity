@@ -105,6 +105,14 @@ function SessionEditor() {
   };
 
   const handlePublish = async () => {
+    // Check if user is logged in
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login to publish a session!");
+      navigate("/login");
+      return;
+    }
+
     try {
       let publishId = id;
 

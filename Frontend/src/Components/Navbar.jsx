@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { toast } from 'react-toastify';
 
 function Navbar() {
   const nav = useNavigate(); // for programmatic navigation
@@ -21,6 +22,24 @@ function Navbar() {
     nav("/login");
   };
 
+  // Handle new session click for non-logged-in users
+  const handleNewSessionClick = (e) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      toast.error("Please login to create a new session!");
+      nav("/login");
+    }
+  };
+
+  // Handle my sessions click for non-logged-in users
+  const handleMySessionsClick = (e) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      toast.error("Please login to view your sessions!");
+      nav("/login");
+    }
+  };
+
   return (
     <nav className="bg-purple-950 text-white px-6 py-4 shadow-md sticky top-0 z-50">
       <div className="flex justify-between items-center">
@@ -39,24 +58,31 @@ function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden md:flex gap-6 items-center">
+          <Link to="/dashboard" className="hover:text-gray-300 hover:underline transition">
+            Dashboard
+          </Link>
+          <Link 
+            to="/my-sessions" 
+            onClick={handleMySessionsClick}
+            className="hover:text-gray-300 hover:underline transition"
+          >
+            My Sessions
+          </Link>
+          <Link 
+            to="/edit/new" 
+            onClick={handleNewSessionClick}
+            className="hover:text-gray-300 hover:underline transition"
+          >
+            New Session
+          </Link>
+          
           {isLoggedIn ? (
-            <>
-              <Link to="/dashboard" className="hover:text-gray-300 hover:underline transition">
-                Dashboard
-              </Link>
-              <Link to="/my-sessions" className="hover:text-gray-300 hover:underline transition">
-                My Sessions
-              </Link>
-              <Link to="/edit/new" className="hover:text-gray-300 hover:underline transition">
-                New Session
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition"
-              >
-                Logout
-              </button>
-            </>
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition"
+            >
+              Logout
+            </button>
           ) : (
             <>
               <Link to="/login" className="hover:text-gray-300 transition">
@@ -73,24 +99,31 @@ function Navbar() {
       {/* Mobile links */}
       {menuOpen && (
         <div className="md:hidden mt-4 flex flex-col gap-3">
+          <Link to="/dashboard" className="hover:text-gray-300 transition">
+            Dashboard
+          </Link>
+          <Link 
+            to="/my-sessions" 
+            onClick={handleMySessionsClick}
+            className="hover:text-gray-300 transition"
+          >
+            My Sessions
+          </Link>
+          <Link 
+            to="/edit/new" 
+            onClick={handleNewSessionClick}
+            className="hover:text-gray-300 transition"
+          >
+            New Session
+          </Link>
+          
           {isLoggedIn ? (
-            <>
-              <Link to="/dashboard" className="hover:text-gray-300 transition">
-                Dashboard
-              </Link>
-              <Link to="/my-sessions" className="hover:text-gray-300 transition">
-                My Sessions
-              </Link>
-              <Link to="/edit/new" className="hover:text-gray-300 transition">
-                New Session
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition"
-              >
-                Logout
-              </button>
-            </>
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition"
+            >
+              Logout
+            </button>
           ) : (
             <>
               <Link to="/login" className="hover:text-gray-300 transition">

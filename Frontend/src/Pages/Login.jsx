@@ -47,7 +47,7 @@ function Login() {
           Login
         </button>
 
-                <p className="text-center my-2">Not yet Registered? <a href="/register" className="text-blue-700">Register</a></p>
+                <p className="text-center my-2 opacity-90">Don't have an account? <a href="/register" className="text-blue-700 ">Register</a></p>
 
       </div>
     </div>
