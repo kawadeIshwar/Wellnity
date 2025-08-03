@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function SessionEditor() {
   const { id } = useParams();
@@ -25,7 +27,7 @@ function SessionEditor() {
 
   useEffect(() => {
     if (!id) {
-      alert("No session ID provided");
+      toast("No session ID provided");
       navigate("/my-sessions");
       return;
     }
@@ -79,7 +81,7 @@ function SessionEditor() {
         if (res.data && res.data._id) {
           navigate(`/edit/${res.data._id}`);
         }
-        if (!isAuto) alert("Session created!");
+        if (!isAuto) toast.success("Session created!");
       } else {
         console.log("Saving draft for session:", id);
         await axios.post("/my-sessions/save-draft", {
@@ -88,7 +90,7 @@ function SessionEditor() {
           tags: tags.split(",").map((t) => t.trim()),
           json_file_url: jsonURL,
         });
-        if (!isAuto) alert("Draft saved!");
+        if (!isAuto) toast.success("Draft saved!");
       }
     } catch (err) {
       console.error("Error saving session:", {
@@ -98,7 +100,7 @@ function SessionEditor() {
         message: err.message,
         isAuto
       });
-      if (!isAuto) alert(`Error saving draft: ${err.response?.data?.msg || err.message}`);
+      if (!isAuto) toast.error(`Error saving draft: ${err.response?.data?.msg || err.message}`);
     }
   };
 
@@ -119,7 +121,7 @@ function SessionEditor() {
           navigate(`/edit/${publishId}`);
         } else {
           console.error("No _id in response:", res.data);
-          alert("Could not create session for publishing");
+          toast.error("Could not create session for publishing");
           return;
         }
       } else {
@@ -129,7 +131,7 @@ function SessionEditor() {
 
       console.log("Publishing session with ID:", publishId);
       await axios.post("/my-sessions/publish", { sessionId: publishId });
-      alert("Session published!");
+      toast.success("Session published!");
       navigate("/dashboard");
     } catch (err) {
       console.error("Error publishing session:", {
@@ -138,49 +140,51 @@ function SessionEditor() {
         data: err.response?.data,
         message: err.message
       });
-      alert(`Error publishing session: ${err.response?.data?.msg || err.message}`);
+      toast.error(`Error publishing session: ${err.response?.data?.msg || err.message}`);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-emerald-50 flex items-center justify-center py-10 px-4 font-poppins">
-      <div className="w-full max-w-2xl bg-slate-900 shadow-xl rounded-xl p-8">
-        <h1 className="text-3xl font-bold mb-6 text-center text-gray-100">
+ return (
+    <div className="min-h-screen flex items-center justify-center bg-purple-100 px-4">
+      <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-xl">
+        <h1
+          className="text-3xl font-bold mb-6 text-center text-purple-800"
+        >
           Session Editor
         </h1>
 
         <input
           placeholder="Title"
-          className="block border-2 text-gray-900 p-3 mb-4 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className="w-full mb-4 text-purple-800 font-semibold px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2  focus:ring-purple-400 text-sm"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
 
         <input
           placeholder="Tags (comma-separated)"
-          className="block border border-gray-300 p-3 mb-4 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className="w-full mb-4 text-purple-800 font-semibold px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 text-sm"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
         />
 
         <input
           placeholder="JSON File URL"
-          className="block border border-gray-300 p-3 mb-6 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className="w-full mb-6 text-purple-800 font-semibold px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 text-sm"
           value={jsonURL}
           onChange={(e) => setJsonURL(e.target.value)}
         />
 
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-between gap-4">
           <button
-            onClick={() => handleSave()}
-            className="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700 transition"
+            onClick={handleSave}
+            className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-md text-sm font-medium transition"
           >
             Save Draft
           </button>
 
           <button
             onClick={handlePublish}
-            className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition"
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md text-sm font-medium transition"
           >
             Publish
           </button>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -12,15 +14,16 @@ function Login() {
       const res = await axios.post("/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
       nav("/dashboard");
+      toast.success("Login successful!");
     } catch (err) {
-      alert(err.response?.data?.msg || "Login failed");
+      toast.error(err.response?.data?.msg || "Login failed");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-purple-100 px-4">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm">
-        <h1 className="text-3xl font-semibold mb-6 text-center text-purple-800">
+      <div className="bg-white p-8 rounded-2xl font-bold shadow-xl w-full max-w-sm">
+        <h1 className="text-3xl font-bold mb-6 text-center text-purple-800">
           Login to Wellnity
         </h1>
         <input

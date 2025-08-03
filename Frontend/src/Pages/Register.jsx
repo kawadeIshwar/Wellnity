@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -10,17 +12,17 @@ function Register() {
   const handleRegister = async () => {
     try {
       const res = await axios.post("/auth/register", { email, password });
-      alert("Registration successful! Please login with your credentials.");
+      toast.success("Registration successful! Please login with your credentials.");
       nav("/login");
     } catch (err) {
-      alert(err.response?.data?.msg || "Register failed");
+      toast.error(err.response?.data?.msg || "Register failed");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-purple-100">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm">
-        <h1 className="text-3xl font-bold mb-6 text-center text-purple-800">Register on Wellnity</h1>
+      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-sm">
+        <h1 className="text-3xl font-semibold mb-6 text-center text-purple-800">Register on Wellnity</h1>
         <input
           type="email"
           placeholder="Email"
