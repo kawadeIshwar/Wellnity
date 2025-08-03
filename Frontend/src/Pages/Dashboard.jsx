@@ -28,7 +28,7 @@ function Dashboard() {
 
 
       {sessions.length === 0 ? (
-        <p className="text-gray-800">No published sessions yet.</p>
+        <p className="text-gray-800">Loading Sessions Please wait...</p>
       ) : (
         <div className="flex flex-col gap-4 items-center w-full max-w-2xl">
           {sessions.map((s) => (

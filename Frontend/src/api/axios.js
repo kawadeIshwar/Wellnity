@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Create a custom axios instance with a base URL
 const instance = axios.create({
-  baseURL: "http://localhost:5000/api", // All requests will start with this
+  baseURL: "https://wellnity.onrender.com/api", // All requests will start with this
 });
 
 // Add a request interceptor to attach token (if present)
